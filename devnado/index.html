@@ -68,11 +68,15 @@
     }
     @-webkit-keyframes lift {
       0% { bottom:-80px; -webkit-transform: translateZ(10px) rotate(0deg) scale(0.1);
-        transform: translateZ(10px) rotate(0deg) scale(0.1)}
+        transform: translateZ(10px) rotate(0deg) scale(0.1); opacity:0;}
+      10% { bottom:-80px; -webkit-transform: translateZ(10px) rotate(0deg) scale(0.1);
+        transform: translateZ(10px) rotate(0deg) scale(0.1); opacity:1;}
       50% { bottom:65px; -webkit-transform: translateZ(40px) rotate(1800deg) scale(0.2);
-        transform: translateZ(40px) rotate(1800deg) scale(0.2);}
+        transform: translateZ(40px) rotate(1800deg) scale(0.2);  opacity:1;}
+      90% { bottom:150px;  -webkit-transform: translateZ(200px) rotate(3600deg)scale(0.4);
+        transform: translateZ(200px) rotate(3600deg)scale(0.4); opacity:0.8;}
       100% { bottom:150px;  -webkit-transform: translateZ(200px) rotate(3600deg)scale(0.4);
-        transform: translateZ(200px) rotate(3600deg)scale(0.4);}
+        transform: translateZ(200px) rotate(3600deg)scale(0.4); opacity:0;}
     }
     header {
        -webkit-animation: spin 5s infinite linear;
