@@ -55,6 +55,11 @@
       border:5px solid #333;
       border-radius: 30px;
     }
+
+    .special {
+      border:none !important;
+      border-radius: 0;
+    }
     
     @-webkit-keyframes spin {
       from {
@@ -205,6 +210,16 @@
         "avatar": "speakers/e8fd954beac1c9390ffed01a7019b3f33dd0d7b9-s48.jpeg",
         "name": "Mark Drew",
         "twitter": "markdrew"
+      }, {
+        "avatar": "speakers/notben.png",
+        "name": "Not! Ben Nadel",
+        "twitter": "notbennadel",
+        "special": true
+      }, {
+        "avatar": "speakers/andy.png",
+        "name": "Andy Allan",
+        "twitter": "fymd",
+        "special": true
       }
     ];
 
@@ -227,6 +242,9 @@
       stage.appendChild(spin);
       spin.className = 'spinner';
       el.className = 'plane';
+      if (speaker.special) {
+        el.className += ' special';
+      }
       
       speakerIdent.href = 'https://twitter.com/' + speaker.twitter;
       speakerIdent.innerText = speaker.name + ' (@' + speaker.twitter + ')';
