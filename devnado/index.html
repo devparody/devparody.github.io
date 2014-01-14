@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>DevNado</title>
+</head>
+<body>
+  <style>
+    body {
+      background-color: white; color: #777;
+      font-family: Verdana, Arial; font-size: 12px;
+    }
+
+    #container {
+      width: 100%;
+      height: 400px;
+      -webkit-perspective: 800;
+      -webkit-perspective-origin: 50% 400px;
+    }
+    #stage {
+      position:relative;
+      width: 100%;
+      height: 100%;
+      -webkit-transition: -webkit-transform 2s;
+      -webkit-transform-style: preserve-3d;
+      background: url(tornado.gif) center bottom no-repeat;
+    }
+    
+    .spinner {
+      position: absolute;
+      left:50%;
+      bottom:0;
+      margin-left:-100px;
+      width:200px; height:200px;
+      -webkit-transform-style: preserve-3d;
+      -webkit-animation: spin 1.2s infinite linear;
+    }
+    
+    .spinner img {display:none;}
+
+    .plane {
+      display:inline !important;
+      position: absolute;
+      height: 200px;
+      width: 200px;
+      text-align: center;
+      -webkit-animation: lift 21.3s infinite linear;
+      border:5px solid #333;
+      border-radius: 30px;
+    }
+    
+    @-webkit-keyframes spin {
+      from { -webkit-transform: rotateY(0) }
+      to   { -webkit-transform: rotateY(360deg) }
+    }
+    @-webkit-keyframes lift {
+      0% { bottom:-80px; -webkit-transform: translateZ(10px) rotate(0deg) scale(0.1)}
+      50% { bottom:65px; -webkit-transform: translateZ(40px) rotate(1800deg) scale(0.2)}
+      100% { bottom:150px;  -webkit-transform: translateZ(200px) rotate(3600deg)scale(0.4)}
+    }
+    header {
+       -webkit-animation: spin 5s infinite linear;
+       text-align:center;
+    }
+    .launch button {z-index:10000;}
+  </style>
+ <body>
+  <div id="container">
+    <header>
+      <h1>Devnado</h1>
+      <a href="http://sotr.eu">Scotch on the Rocks</a> 2014
+    </header>
+    <div id="stage"></div>
+    <div class="launch"><button id="release">Release a speaker!</button></div>
+    <p>Released: <img id="speakerImg"> <a id="speaker"></a></p>
+  </div>
+  <script>
+    // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    function shuffle(array) {
+      var currentIndex = array.length
+        , temporaryValue
+        , randomIndex
+        ;
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+
+      return array;
+    }           
+    var speakers = [
+      {
+        "avatar": "speakers/70ee564fe349013cadf096c6bb6cfa9d926a9833-s48.jpeg",
+        "name": "Bruce Lawson",
+        "twitter": "brucel"
+      }, {                      
+        "avatar": "speakers/0e36d8f019ab5032ee67683c685a1238a792f126-s48.png",
+        "name": "Kitt Hodsden",
+        "twitter": "kitt"                
+      }, {              
+        "avatar": "speakers/6d449d875ead0a7dd1ada74ec289e7b37ff99f47-s48.png",
+        "name": "David Boyer",
+        "twitter": "misterdai"
+      }, {
+        "avatar": "speakers/ac2117dc5af42f16ae99052c2d2d9b8876fec434-s48.jpg",
+        "name": "Phil Leggetter",
+        "twitter": "leggetter"
+      }, {
+        "avatar": "speakers/3cb69b0c00ef2c59d022b34df68c548d9a9f9539-s48.jpeg",
+        "name": "Sean Corfield",
+        "twitter": "seancorfield"
+      }, {
+        "avatar": "speakers/8f0464f271c245df729feabd205013a722d37a87-s48.jpeg",
+        "name": "Jatin Nanda",
+        "twitter": "xebu"
+      }, {
+        "avatar": "speakers/b34cb8ff621dff6f900ace783a250d80aa883649-s48.png",
+        "name": "Kai Koenig",
+        "twitter": "agentK"
+      }, {
+        "avatar": "speakers/fce6e0754c337ae2cf878811f212b1e561c360fb-3c71a4-s48.jpeg",
+        "name": "Simon Elliston Ball",
+        "twitter": "sireb"
+      }, {
+        "avatar": "speakers/2fe14c9ecc4e99a1dd20f52a7d827e67566fb4c7-s48.jpeg",
+        "name": "Donna Lichaw",
+        "twitter": "dlichaw"
+      }, {
+        "avatar": "speakers/eba639b6a0b3d91e44f9811e7f905c280ee44b6f-s48.jpg",
+        "name": "Benjamin Howarth",
+        "twitter": "benjaminhowarth"
+      }, {
+        "avatar": "speakers/5f955e02e03a178a81a6560791f4a390c769fea8-s48.jpeg",
+        "name": "Kev McCabe™",
+        "twitter": "BigMadKev"
+      }, {
+        "avatar": "speakers/980f9183f78992aa0668ef26ab22911e122421d2-s48.jpg",
+        "name": "Thomas Parisot",
+        "twitter": "oncletom"
+      }, {
+        "avatar": "speakers/7a70de108a75a043e1dbcf5f399247383abd5730-s48.jpeg",
+        "name": "Dale Harvey",
+        "twitter": "daleharvey"
+      }, {
+        "avatar": "speakers/331addd79f19ca2754bfb6ef103076794cd2aa25-s48.jpg",
+        "name": "Anna Shipman",
+        "twitter": "annashipman"
+      }, {
+        "avatar": "speakers/70ed59f463255585905b6298f44df8cede88fdda-s48.jpeg",
+        "name": "anna bulenkova",
+        "twitter": "povergo"
+      }, {
+        "avatar": "speakers/c8337b3a12a5db3f7478cf1997b65b704ba783a9-s48.jpeg",
+        "name": "Tuuli AaltoNyyssönen",
+        "twitter": "turkutuuli"
+      }, {
+        "avatar": "speakers/cac4b3bad5eb57348813a8b68a483a8c298a6a74-s48.jpg",
+        "name": "Matt Gifford",
+        "twitter": "coldfumonkeh"
+      }, {
+        "avatar": "speakers/0de51cecac3fda0f8027d1fbef3e3040787059a2-s48.jpeg",
+        "name": "Rob Dudley",
+        "twitter": "robdudley"
+      }, {
+        "avatar": "speakers/59c41ad8d7fbd5f7232bfe8fcaafb6e93008a7b9-s48.jpg",
+        "name": "Rakshith Naresh",
+        "twitter": "rakshithn"
+      }, {
+        "avatar": "speakers/b8f65fd2d50c8071e4c896c406e3270089ca58a8-s48.jpeg",
+        "name": "Kay Smoljak",
+        "twitter": "KaySmoljak"
+      }, {
+        "avatar": "speakers/f81f5b02a7b424844e76250c0a992d1e3dd27f5b-s48.jpeg",
+        "name": "Andy Clarke",
+        "twitter": "clarkieclarkie"
+      }, {
+        "avatar": "speakers/e8fd954beac1c9390ffed01a7019b3f33dd0d7b9-s48.jpeg",
+        "name": "Mark Drew",
+        "twitter": "markdrew"
+      }
+    ];
+
+    shuffle(speakers);
+
+    var victim = 0;
+    var btn = document.getElementById('release');
+    var stage = document.getElementById('stage');
+    var speakerIdent = document.getElementById('speaker');
+    var speakerImage = document.getElementById('speakerImg');
+
+    btn.onclick = function() {
+      speaker = speakers[victim % speakers.length];
+      // Create the spin
+      var spin = document.createElement('div');
+      var el = document.createElement('img');
+      el.src = speaker.avatar;
+      el.title = el.alt = speaker.name;
+      spin.appendChild(el);
+      stage.appendChild(spin);
+      spin.className = 'spinner';
+      el.className = 'plane';
+      
+      speakerIdent.href = 'https://twitter.com/' + speaker.twitter;
+      speakerIdent.innerText = speaker.name + ' (@' + speaker.twitter + ')';
+      speakerImage.src = speaker.avatar;
+      speakerImage.alt = speakerImage.title = speaker.name;
+      victim++;
+    };
+  </script>
+</body>
+</html>
